@@ -1,0 +1,78 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<title>动态创建表格</title>
+<meta charset="utf-8" />
+<style>
+	table{width:600px; border-collapse:collapse;
+		text-align:center;
+	}
+	td,th{border:1px solid #ccc}
+</style>
+
+</head>
+<body>
+<div id="data">
+  <!-- table>thead>tr>th*3 -->
+  <table>
+    <thead>
+      <tr>
+        <th>员工姓名</th>
+        <th>薪资</th>
+        <th>年龄</th>
+        <th>删除</th>
+      </tr>
+    </thead>
+  </table>
+</div>
+<script>
+var json=[
+  {"ename":"Tom", "salary":11000, "age":25},
+  {"ename":"John", "salary":13000, "age":28},
+  {"ename":"Mary", "salary":12000, "age":25}
+];
+
+//先找到table
+var table=document.querySelector("#data>table");
+//先动态创建tbody
+var tbody=document.createElement("tbody");
+//暂时不将tbody添加到table中
+//再遍历json数组中每个员工对象
+for(var emp of json){
+  //每遍历一个员工对象，就创建一个tr，并添加到tbody中
+  var tr=tbody.insertRow();//每遍历一个元素都追加到结尾，结果就就是正序的
+  //var tr=tbody.insertRow(0); //每遍历一个元素都插入到开头，结果就是倒序的
+  //遍历当前员工对象中每属性
+  for(var key in emp){
+    //每遍历一个属性就创建一个td加入tr中
+    var td=tr.insertCell();
+    //设置当前td的内容为当前员工对象的当前属性的属性值
+    td.innerHTML=emp[key];
+  }
+  //当这一行的格通过遍历都加完之后，再额外多加一个td
+  var td=tr.insertCell();
+  //动态创建一个按钮，将按钮放入td中
+  var btn=document.createElement("button");
+  btn.innerHTML="×";
+  td.appendChild(btn);
+  //为新添加的按钮绑定单击事件
+  btn.onclick=function(){
+    // this.innerHTML="❀"
+    //先获得当前按钮所在的行: 当前按钮的爹的爹
+    var tr=this.parentNode.parentNode;
+    //先获得当前行中第一个格中的人名
+    var ename=tr.cells[0].innerHTML;
+    //先跟用户确认是否继续删除xxx吗？
+    var result=confirm(`是否继续删除${ename}吗？`)
+    //如果result返回的是true，说明用点了确认
+    if(result==true){
+      //才删除当前按钮所在的行
+      table.deleteRow(tr.rowIndex);
+    }
+  }
+}
+//当整个表格内容填充完成后，最后再将tbody添加到table中——浏览器只需要重绘一次！
+table.appendChild(tbody);
+</script>
+</body>
+</html>

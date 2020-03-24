@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    h1{
+      background-color:red;
+    }
+  </style>
+</head>
+<body>
+<h1 id="h1" style="color:yellow">Welcome dingding</h1>
+<script>
+var h1=document.getElementById("h1");
+//先获得h1元素对象身上所有计算后的样式的集合
+var style=getComputedStyle(h1);
+console.log(style);
+
+//想获取h1的内联样式color
+//只有知道color是内联样式时，才能这么做
+//console.log(h1.style.color);
+//任何情况下都可: 
+console.log(style.color);
+
+//想获得内部样式表中h1的background-color
+//错误:
+//console.log(h1.style.backgroundColor);
+//正确: 
+console.log(style.backgroundColor);
+//想获得浏览器默认样式表中的h1的font-size
+//错误:
+//console.log(h1.style.fontSize);
+//正确:
+console.log(style.fontSize);
+
+//修改h1的背景颜色: 
+//修改h1的内联样式：正确！
+h1.style.backgroundColor="green";
+//                     ↓
+//结果: <h1 style="...;background-color:green"> 优先级最高！
+
+//修改计算后的css属性: 错误！报错！
+style.backgroundColor="pink";
+</script>
+</body>
+</html>
